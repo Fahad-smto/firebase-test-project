@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import './App.css'
 import app from './Firebase/firebase.config'
-import { GoogleAuthProvider,getAuth, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider,getAuth, signInWithPopup, signOut } from "firebase/auth";
 
 
 
@@ -25,18 +25,31 @@ function App() {
     })
   }
 
+  const handleSingOut =()=>{
+    signOut(auth)
+    .then(result=>{
+      console.log(result)
+      setUser(null);
+    })
+    .catch(error=>{
+      console.log(error)
+    })
+  }
 
   return (
     <>
       
       <h1>Firebase + React</h1>
-       <button onClick={handleGoogleSingIn}>google Sing In</button>
+       {  user ?
+           <button onClick={handleSingOut}>google Sing Out</button> :
+           <button onClick={handleGoogleSingIn}>google Sing In</button> 
+       }
       {
         user &&
         <div className='card'>
           <h4>User :{user.displayName}</h4>
           <h4>email :{user.email}</h4>
-          <h4>photo :{user.photoURL}</h4>
+            <img  src={user.photoURL} alt="" />
         </div>
       }
       
